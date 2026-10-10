@@ -18,8 +18,11 @@ public class WheelController : MonoBehaviour
     public float _maxTurnAngle = 20f;
     private float _currentAcceleration = 0f;
     private float _currentBrakeForce = 0f;
-    private float _currentTurnAngle = 0f;
+    private float _currentSteering = 0f;
 
+    public float _accelerationResponse = 300f;
+    public float _brakeResponse = 300f;
+    public float _steeringResponse = 300f;
 
     private void OnEnable()
     {
@@ -41,11 +44,22 @@ public class WheelController : MonoBehaviour
         _steeringAction.action.Disable();
     }
 
+    private float GetValueMoveTowards(InputActionReference ia, float force, float current, float response)
+    {
+        // i should get the input in update and keep only physics in fixedupdate
+
+        float input = ia.action.ReadValue<float>();
+        float targetforce = input * force;
+
+        float result = Mathf.MoveTowards(current, targetforce, response * Time.fixedDeltaTime);
+        return result;
+    }
 
     private void FixedUpdate()
     {
-        _currentAcceleration = _acceleration * _throttleAction.action.ReadValue<float>();
-        _currentBrakeForce = _brakeForce * _brakeAction.action.ReadValue<float>();
+        _currentAcceleration = GetValueMoveTowards(_throttleAction, _acceleration, _currentAcceleration, _accelerationResponse);
+        _currentBrakeForce = GetValueMoveTowards(_brakeAction, _brakeForce, _currentBrakeForce, _brakeResponse);
+        _currentSteering = GetValueMoveTowards(_steeringAction, _maxTurnAngle, _currentSteering, _steeringResponse);
 
         _frontRight.motorTorque = _currentAcceleration;
         _frontLeft.motorTorque = _currentAcceleration;
@@ -55,8 +69,9 @@ public class WheelController : MonoBehaviour
         _backRight.brakeTorque = _currentBrakeForce;
         _backLeft.brakeTorque = _currentBrakeForce;
 
-        _currentTurnAngle = _maxTurnAngle * _steeringAction.action.ReadValue<float>();
-        _frontRight.steerAngle = _currentTurnAngle;
-        _frontLeft.steerAngle = _currentTurnAngle;
+        _frontRight.steerAngle = _currentSteering;
+        _frontLeft.steerAngle = _currentSteering;
+
+        // turn less if goes fast (more if slow)
     }
 }
