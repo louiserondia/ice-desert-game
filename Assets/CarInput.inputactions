@@ -17,16 +17,6 @@
                     "priority": 0
                 },
                 {
-                    "name": "Brake",
-                    "type": "Button",
-                    "id": "35bda153-9846-4611-8e23-c8b708cab813",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false,
-                    "priority": 0
-                },
-                {
                     "name": "Steering",
                     "type": "Button",
                     "id": "6c144bd0-b1d3-40db-8eee-f7bef0101062",
@@ -72,7 +62,7 @@
                 {
                     "name": "negative",
                     "id": "fad72c1b-bb98-46b0-b390-dc2252dca350",
-                    "path": "<Keyboard>/d",
+                    "path": "<Keyboard>/a",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -83,7 +73,7 @@
                 {
                     "name": "positive",
                     "id": "38e8a593-fd6a-47cb-9265-14e031afdb5e",
-                    "path": "<Keyboard>/a",
+                    "path": "<Keyboard>/d",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -114,26 +104,37 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "",
-                    "id": "0e511d0b-f1e5-4fdc-a878-e94a2fee2df5",
+                    "name": "1D Axis",
+                    "id": "2a17ec0d-1817-4cc0-965e-c88adffa2434",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Throttle",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "581b1d3c-947f-4e5f-a788-f471651993ae",
+                    "path": "<Keyboard>/s",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Throttle",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "000f98a4-eb9d-4751-9642-aee77d3bf257",
                     "path": "<Keyboard>/w",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "Throttle",
                     "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "46c3f3de-030e-4fdb-96df-57719d6ccc09",
-                    "path": "<Keyboard>/s",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Brake",
-                    "isComposite": false,
-                    "isPartOfComposite": false
+                    "isPartOfComposite": true
                 }
             ]
         }

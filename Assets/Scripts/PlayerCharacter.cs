@@ -4,11 +4,9 @@ using UnityEngine.InputSystem;
 
 public class PlayerCharacter : BasicCharacter
 {
-    [SerializeField] // to modify in editor, better than to put public
-    private InputActionAsset _inputAsset;
-
-    [SerializeField]
-    private InputActionReference _movementAction;
+    // to modify in editor, better than to put public
+    [SerializeField] private InputActionAsset _inputAsset;
+    [SerializeField] private InputActionReference _movementAction;
 
     private InputAction _jumpAction;
     private InputAction _shootAction;
@@ -39,10 +37,18 @@ public class PlayerCharacter : BasicCharacter
         _inputAsset.Disable();
     }
 
+    private void Start()
+    {
+    }
+
     void Update()
     {
         HandleMovementInput();
         HandleAttackInput();
+    }
+
+    private void FixedUpdate()
+    {
     }
 
     private void HandleAttackInput()
@@ -67,6 +73,11 @@ public class PlayerCharacter : BasicCharacter
         if (_movementBehaviour == null) return;
 
         _movementBehaviour.Jump();
+    }
+
+    void Die()
+    {
+        OnDestroy();
     }
 
     protected void OnDestroy()
