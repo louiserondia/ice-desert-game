@@ -1,6 +1,7 @@
-using System.Diagnostics;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
+
 
 public class Health : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class Health : MonoBehaviour
     //[SerializeField] private int _startTemperature = 0;
     [SerializeField] private Weather _weather;
     private float _temperature;
+    public Slider slider;
 
     private void Awake()
     {
@@ -31,8 +33,9 @@ public class Health : MonoBehaviour
     {
         float sign = _weather.GetTemperature > 0 ? 1 : -1;
         _temperature += _weather.GetTemperature * UnityEngine.Time.deltaTime * 0.02f;
+        slider.value = _temperature;
 
-        UnityEngine.Debug.Log("Player: " + _temperature);
+        //UnityEngine.Debug.Log("Player: " + _temperature);
         if (_temperature > 100f || _temperature < -100f)
         {
             Kill();
@@ -50,7 +53,8 @@ public class Health : MonoBehaviour
 
     void Kill()
     {
-        Destroy(gameObject);
+        Debug.Log("DEAD !!!!!!");
+        //Destroy(gameObject);
     }
 
     public void AddToTemperature(float amount)

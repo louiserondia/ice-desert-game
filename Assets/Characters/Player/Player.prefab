@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &151660387579366238
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1233595771190928049}
+  m_Layer: 0
+  m_Name: LookAt
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1233595771190928049
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 151660387579366238}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 2.05, z: 0.89}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1536131709580831314}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1414002121913217915
 GameObject:
   m_ObjectHideFlags: 0
@@ -313,6 +344,7 @@ Transform:
   - {fileID: 3279688910520670395}
   - {fileID: 1727054881501746229}
   - {fileID: 7086679979189497639}
+  - {fileID: 1233595771190928049}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &2173863320604635441
@@ -356,18 +388,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WheelController
   _inputAsset: {fileID: -944628639613478452, guid: 5f038805de04c234f8ea68147f82f44b, type: 3}
   _throttleAction: {fileID: -598574045242922649, guid: 5f038805de04c234f8ea68147f82f44b, type: 3}
-  _brakeAction: {fileID: 3564254345206354975, guid: 5f038805de04c234f8ea68147f82f44b, type: 3}
+  _handbrakeAction: {fileID: 7529760254946364577, guid: 5f038805de04c234f8ea68147f82f44b, type: 3}
   _steeringAction: {fileID: 3201079012087078690, guid: 5f038805de04c234f8ea68147f82f44b, type: 3}
   _frontRight: {fileID: 6105252469705622426}
   _frontLeft: {fileID: 5038432370090756145}
   _backRight: {fileID: 9194216802799682751}
   _backLeft: {fileID: 736094307190046637}
-  _acceleration: 500
-  _brakeForce: 300
-  _maxTurnAngle: 20
-  _accelerationResponse: 300
-  _brakeResponse: 300
-  _steeringResponse: 300
+  _frontLeftWheelVisual: {fileID: 5330924138538749249}
+  _frontRightWheelVisual: {fileID: 6496485690117854993}
+  _acceleration: 1500
+  _handbrakeForce: 1000
+  _maxTurnAngle: 30
+  _accelerationResponse: 3000
+  _accelerationBackwardsResponse: 3000
+  _handbrakeResponse: 1500
+  _steeringResponse: 10
 --- !u!1 &8003736219322506109
 GameObject:
   m_ObjectHideFlags: 0
@@ -955,6 +990,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0f20207ad1544d54481b12d0e9a83a0d, type: 3}
+--- !u!1 &6496485690117854993 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3732821303373127735, guid: 0f20207ad1544d54481b12d0e9a83a0d, type: 3}
+  m_PrefabInstance: {fileID: 7630648501108668198}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &9004952194285620852 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1521519778927622482, guid: 0f20207ad1544d54481b12d0e9a83a0d, type: 3}
@@ -1017,6 +1057,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0f20207ad1544d54481b12d0e9a83a0d, type: 3}
+--- !u!1 &5330924138538749249 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3732821303373127735, guid: 0f20207ad1544d54481b12d0e9a83a0d, type: 3}
+  m_PrefabInstance: {fileID: 8806395930547367286}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8010527550953395236 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1521519778927622482, guid: 0f20207ad1544d54481b12d0e9a83a0d, type: 3}
