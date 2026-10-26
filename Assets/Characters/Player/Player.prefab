@@ -318,6 +318,7 @@ GameObject:
   - component: {fileID: 1536131709580831314}
   - component: {fileID: 2173863320604635441}
   - component: {fileID: 7068813266628187428}
+  - component: {fileID: 16762219514608195}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -388,7 +389,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WheelController
   _inputAsset: {fileID: -944628639613478452, guid: 5f038805de04c234f8ea68147f82f44b, type: 3}
   _throttleAction: {fileID: -598574045242922649, guid: 5f038805de04c234f8ea68147f82f44b, type: 3}
-  _handbrakeAction: {fileID: 7529760254946364577, guid: 5f038805de04c234f8ea68147f82f44b, type: 3}
+  _brakeAction: {fileID: 0}
   _steeringAction: {fileID: 3201079012087078690, guid: 5f038805de04c234f8ea68147f82f44b, type: 3}
   _frontRight: {fileID: 6105252469705622426}
   _frontLeft: {fileID: 5038432370090756145}
@@ -396,13 +397,23 @@ MonoBehaviour:
   _backLeft: {fileID: 736094307190046637}
   _frontLeftWheelVisual: {fileID: 5330924138538749249}
   _frontRightWheelVisual: {fileID: 6496485690117854993}
-  _acceleration: 1500
-  _handbrakeForce: 1000
-  _maxTurnAngle: 30
-  _accelerationResponse: 3000
-  _accelerationBackwardsResponse: 3000
-  _handbrakeResponse: 1500
-  _steeringResponse: 10
+  _motorTorque: 1500
+  _brakeTorque: 3000
+  _maxSteerAngle: 30
+--- !u!114 &16762219514608195
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5908869723334291878}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d43022284a116be49a0d63f0cd0758a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Health
+  _weather: {fileID: 0}
+  slider: {fileID: 0}
 --- !u!1 &8003736219322506109
 GameObject:
   m_ObjectHideFlags: 0
