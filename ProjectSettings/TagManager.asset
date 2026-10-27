@@ -7,6 +7,7 @@ TagManager:
   - Friendly
   - Enemy
   - Sun
+  - Moon
   layers:
   - Default
   - TransparentFX

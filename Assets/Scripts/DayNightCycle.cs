@@ -8,17 +8,17 @@ public class DayNightCycle : MonoBehaviour
     [SerializeField] private Light _light;
     [SerializeField] private float _rotationSpeed;
 
-    [SerializeField] private GameObject _sunMesh;
-    [SerializeField] private float _distSun;
+    [SerializeField] private GameObject _mesh; // could be found bc direct child no? or called mesh
+    [SerializeField] private float _distSun; 
 
     public Light GetDirectionalLight
     {
         get { return _light; }
     }
 
-    public GameObject GetSunMesh
+    public GameObject GetMesh
     {
-        get { return _sunMesh; }
+        get { return _mesh; }
     }
 
     private float time;
@@ -32,12 +32,17 @@ public class DayNightCycle : MonoBehaviour
     {
         //_light.transform.Rotate(Vector3.right, _rotationSpeed * Time.deltaTime);
 
-        Vector3 pos = _sunMesh.transform.position;
+        Vector3 pos = _mesh.transform.position;
         pos.x = _distSun * Mathf.Cos(time * _rotationSpeed);
         pos.y = _distSun * Mathf.Sin(time * _rotationSpeed);
-        _sunMesh.transform.position = pos;
+        _mesh.transform.position = pos;
 
         _light.transform.rotation = Quaternion.LookRotation(Vector3.Normalize(-pos));
+    }
+
+    public bool IsAboveHorizon()
+    {
+        return _mesh.transform.position.y > 0;
     }
 }
 

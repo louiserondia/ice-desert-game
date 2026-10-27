@@ -6,20 +6,23 @@ using UnityEngine.UI;
 
 public class Health : MonoBehaviour
 {
-    [SerializeField] private Weather _weather;
+    //[SerializeField] private Weather _weather; // maybe completely disable weather, only keep day night cycle
+
     [SerializeField] private Material _hotMaterial;
     [SerializeField] private Material _coldMaterial;
+
+    private GameObject _sun;
+    private GameObject _moon;
+
     private float _temperature;
     public Slider slider;
 
-    private GameObject _sunMesh;
+    private bool isInsideEndZone = false;
 
     private void Awake()
     {
-        _sunMesh = GameObject.FindWithTag("Sun");
-        UnityEngine.Debug.Log(_sunMesh.name);
-
-
+        _sun = GameObject.FindWithTag("Sun");
+        _moon = GameObject.FindWithTag("Moon");
     }
 
     void Start()
@@ -34,52 +37,79 @@ public class Health : MonoBehaviour
 
     void UpdateTemperature()
     {
+        if (isInsideEndZone) return;
         RaycastHit hit;
+        var body = transform.Find("BodyVisual/Body");
+        DayNightCycle sunCycle = _sun.GetComponent<DayNightCycle>();
+        DayNightCycle moonCycle = _moon.GetComponent<DayNightCycle>();
 
-        Vector3 direction = transform.position - _sunMesh.transform.position;
-        Physics.Raycast(_sunMesh.transform.position, direction, out hit, Mathf.Infinity);
-            var body = transform.Find("BodyVisual/Body");
+        Vector3 sunPos = sunCycle.GetMesh.transform.position;
+        Vector3 moonPos = moonCycle.GetMesh.transform.position;
+        Vector3 directionSun = transform.position - sunPos;
+        Vector3 directionMoon = transform.position - moonPos;
 
-        if (hit.collider.gameObject.name == "BodyVisual")
+        // day time, sun is up and we don't care about the moon
+        if (sunCycle.IsAboveHorizon())
         {
-            UnityEngine.Debug.DrawRay(_sunMesh.transform.position, direction * hit.distance, Color.yellow);
-     
-            UnityEngine.Debug.Log("temp " + _temperature);
-            _temperature += (_sunMesh.transform.position.y / direction.magnitude) * UnityEngine.Time.deltaTime * 10;
+            Physics.Raycast(sunPos, directionSun, out hit, Mathf.Infinity);
 
-            body.GetComponent<MeshRenderer>().material = _hotMaterial;
-            //material gets red 
+            if (hit.collider.gameObject.name == "BodyVisual")
+            {
+                _temperature += (sunPos.y / directionSun.magnitude) * UnityEngine.Time.deltaTime * 10;
+                body.GetComponent<MeshRenderer>().material = _hotMaterial;
+            }
+            else
+            {
+                _temperature -= UnityEngine.Time.deltaTime * 5;
+                body.GetComponent<MeshRenderer>().material = _coldMaterial;
+            }
+
+            _moon.GetComponentInChildren<Light>().intensity = 0.2f;
         }
-        else
+        // night time, sun is down and moon is up
+        else if (moonCycle.IsAboveHorizon())
         {
-            _temperature -= UnityEngine.Time.deltaTime * 5;
-            UnityEngine.Debug.Log(UnityEngine.Time.deltaTime * 5);
+            _moon.GetComponentInChildren<Light>().intensity = 1.55f;
+            Physics.Raycast(moonPos, directionMoon, out hit, Mathf.Infinity);
 
-            UnityEngine.Debug.DrawRay(_sunMesh.transform.position, direction * 1000, Color.white);
-            body.GetComponent<MeshRenderer>().material = _coldMaterial;
-            //material gets blue
+            if (hit.collider.gameObject.name == "BodyVisual")
+            {
+                _temperature += (moonPos.y / directionMoon.magnitude) * UnityEngine.Time.deltaTime * 5;
+                body.GetComponent<MeshRenderer>().material = _hotMaterial;
+            }
+            else
+            {
+                _temperature -= UnityEngine.Time.deltaTime * 10;
+                body.GetComponent<MeshRenderer>().material = _coldMaterial;
+            }
         }
 
-
-        //float sign = _weather.GetTemperature > 0 ? 1 : -1;
-        //_temperature += _weather.GetTemperature * UnityEngine.Time.deltaTime * 0.02f;
         slider.value = _temperature;
 
-        //UnityEngine.Debug.Log("Player: " + _temperature);
         if (_temperature > 100f || _temperature < -100f)
         {
             Kill();
         }
     }
 
-    //public void Damage(int amount)
-    //{
-    //    _currentHealth -= amount;
-    //    if (_currentHealth <= 0)
-    //    {
-    //        Kill();
-    //    }    
-    //}
+    private void OnTriggerEnter(Collider other)
+    {
+        // Optional: check it's the cylinder specifically
+        if (other.name == "EndZone")
+        {
+            isInsideEndZone = true;
+            UnityEngine.Debug.Log("Entered EndZone");
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.name == "EndZone")
+        {
+            isInsideEndZone = false;
+            UnityEngine.Debug.Log("Exited EndZone");
+        }
+    }
 
     void Kill()
     {
@@ -90,7 +120,8 @@ public class Health : MonoBehaviour
     public void AddToTemperature(float amount)
     {
         _temperature += amount;
-        //UnityEngine.Debug.Log("Player: " + _temperature + ", amount: " + amount);
     }
 
 }
+
+//UnityEngine.Debug.DrawRay(_sun.transform.position, directionSun * 1000, Color.white);

@@ -245,7 +245,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -0.74}
-  m_LocalScale: {x: 1.67168, y: 0.83739, z: 2.0374}
+  m_LocalScale: {x: 1.6164811, y: 0.83739, z: 2.0374}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 487818393336017450}
@@ -412,7 +412,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d43022284a116be49a0d63f0cd0758a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Health
-  _weather: {fileID: 0}
+  _hotMaterial: {fileID: 0}
+  _coldMaterial: {fileID: 0}
   slider: {fileID: 0}
 --- !u!1 &8003736219322506109
 GameObject:
