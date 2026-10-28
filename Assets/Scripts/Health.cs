@@ -12,8 +12,6 @@ public class Health : MonoBehaviour
     [SerializeField] private Material _coldMaterial;
 
     private GameObject _sun;
-    private GameObject _moon;
-
     private float _temperature;
     public Slider slider;
 
@@ -22,7 +20,6 @@ public class Health : MonoBehaviour
     private void Awake()
     {
         _sun = GameObject.FindWithTag("Sun");
-        _moon = GameObject.FindWithTag("Moon");
     }
 
     void Start()
@@ -41,14 +38,11 @@ public class Health : MonoBehaviour
         RaycastHit hit;
         var body = transform.Find("BodyVisual/Body");
         DayNightCycle sunCycle = _sun.GetComponent<DayNightCycle>();
-        DayNightCycle moonCycle = _moon.GetComponent<DayNightCycle>();
 
         Vector3 sunPos = sunCycle.GetMesh.transform.position;
-        Vector3 moonPos = moonCycle.GetMesh.transform.position;
         Vector3 directionSun = transform.position - sunPos;
-        Vector3 directionMoon = transform.position - moonPos;
 
-        // day time, sun is up and we don't care about the moon
+        // day time, sun is up, warm up in the sun and cools down in the shade but not lower than 0 degrees
         if (sunCycle.IsAboveHorizon())
         {
             Physics.Raycast(sunPos, directionSun, out hit, Mathf.Infinity);
@@ -58,28 +52,9 @@ public class Health : MonoBehaviour
                 _temperature += (sunPos.y / directionSun.magnitude) * UnityEngine.Time.deltaTime * 10;
                 body.GetComponent<MeshRenderer>().material = _hotMaterial;
             }
-            else
+            else if (_temperature>0)
             {
                 _temperature -= UnityEngine.Time.deltaTime * 5;
-                body.GetComponent<MeshRenderer>().material = _coldMaterial;
-            }
-
-            _moon.GetComponentInChildren<Light>().intensity = 0.2f;
-        }
-        // night time, sun is down and moon is up
-        else if (moonCycle.IsAboveHorizon())
-        {
-            _moon.GetComponentInChildren<Light>().intensity = 1.55f;
-            Physics.Raycast(moonPos, directionMoon, out hit, Mathf.Infinity);
-
-            if (hit.collider.gameObject.name == "BodyVisual")
-            {
-                _temperature += (moonPos.y / directionMoon.magnitude) * UnityEngine.Time.deltaTime * 5;
-                body.GetComponent<MeshRenderer>().material = _hotMaterial;
-            }
-            else
-            {
-                _temperature -= UnityEngine.Time.deltaTime * 10;
                 body.GetComponent<MeshRenderer>().material = _coldMaterial;
             }
         }
