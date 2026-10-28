@@ -2,7 +2,7 @@ using System.Diagnostics;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
-
+using UnityEngine.InputSystem;
 
 public class Health : MonoBehaviour
 {
@@ -10,12 +10,16 @@ public class Health : MonoBehaviour
 
     [SerializeField] private Material _hotMaterial;
     [SerializeField] private Material _coldMaterial;
+    [SerializeField] private GameObject _temperatureIndicator;
+    [SerializeField] private float _heatSpeed;
+    [SerializeField] private float _coolSpeed;
+    [SerializeField] private float _freezeSpeed;
 
     private GameObject _sun;
     private float _temperature;
-    public Slider slider;
 
     private bool isInsideEndZone = false;
+    private bool isDead = false;
 
     private void Awake()
     {
@@ -24,12 +28,32 @@ public class Health : MonoBehaviour
 
     void Start()
     {
+        // reset all data if game restarts after death
         _temperature = 0f;
+        isDead = false;
+      
     }
 
     void Update()
     {
+        if (isDead)
+        {
+            if (Keyboard.current.spaceKey.wasPressedThisFrame)
+            {
+                Start();
+            }
+            return;
+        }
         UpdateTemperature();
+    }
+
+    float GetTemperatureIndicatorPosition(float temperature)
+    {
+        const float max = 100;
+        float width = _temperatureIndicator.transform.parent.GetComponent<RectTransform>().rect.width;
+        float unit = width / max;
+
+        return temperature * unit;
     }
 
     void UpdateTemperature()
@@ -49,17 +73,25 @@ public class Health : MonoBehaviour
 
             if (hit.collider.gameObject.name == "BodyVisual")
             {
-                _temperature += (sunPos.y / directionSun.magnitude) * UnityEngine.Time.deltaTime * 10;
+                _temperature += (sunPos.y / directionSun.magnitude) * UnityEngine.Time.deltaTime * _heatSpeed;
                 body.GetComponent<MeshRenderer>().material = _hotMaterial;
             }
-            else if (_temperature>0)
+            else if (_temperature > 0)
             {
-                _temperature -= UnityEngine.Time.deltaTime * 5;
+                _temperature -= UnityEngine.Time.deltaTime * _coolSpeed;
                 body.GetComponent<MeshRenderer>().material = _coldMaterial;
             }
         }
+        else
+        {
+            _temperature -= UnityEngine.Time.deltaTime * _freezeSpeed;
+        }
 
-        slider.value = _temperature;
+        _temperatureIndicator.transform.localPosition = new Vector3(
+            GetTemperatureIndicatorPosition(_temperature),
+            _temperatureIndicator.transform.localPosition.y,
+            _temperatureIndicator.transform.localPosition.z
+        );
 
         if (_temperature > 100f || _temperature < -100f)
         {
@@ -69,7 +101,6 @@ public class Health : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        // Optional: check it's the cylinder specifically
         if (other.name == "EndZone")
         {
             isInsideEndZone = true;
@@ -90,6 +121,7 @@ public class Health : MonoBehaviour
     {
         //UnityEngine.Debug.Log("DEAD !!!!!!");
         //Destroy(gameObject);
+        isDead = true;
     }
 
     public void AddToTemperature(float amount)

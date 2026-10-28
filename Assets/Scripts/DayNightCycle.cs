@@ -21,7 +21,7 @@ public class DayNightCycle : MonoBehaviour
         get { return _mesh; }
     }
 
-    private float time;
+    private float time = 9f;
 
     void Update()
     {

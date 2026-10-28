@@ -346,6 +346,7 @@ Transform:
   - {fileID: 1727054881501746229}
   - {fileID: 7086679979189497639}
   - {fileID: 1233595771190928049}
+  - {fileID: 4641506771653261885}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &2173863320604635441
@@ -389,7 +390,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WheelController
   _inputAsset: {fileID: -944628639613478452, guid: 5f038805de04c234f8ea68147f82f44b, type: 3}
   _throttleAction: {fileID: -598574045242922649, guid: 5f038805de04c234f8ea68147f82f44b, type: 3}
-  _brakeAction: {fileID: 0}
+  _brakeAction: {fileID: 7529760254946364577, guid: 5f038805de04c234f8ea68147f82f44b, type: 3}
   _steeringAction: {fileID: 3201079012087078690, guid: 5f038805de04c234f8ea68147f82f44b, type: 3}
   _frontRight: {fileID: 6105252469705622426}
   _frontLeft: {fileID: 5038432370090756145}
@@ -397,9 +398,10 @@ MonoBehaviour:
   _backLeft: {fileID: 736094307190046637}
   _frontLeftWheelVisual: {fileID: 5330924138538749249}
   _frontRightWheelVisual: {fileID: 6496485690117854993}
-  _motorTorque: 1500
+  _motorTorque: 3000
   _brakeTorque: 3000
   _maxSteerAngle: 30
+  _idleBrakeTorque: 150
 --- !u!114 &16762219514608195
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -412,9 +414,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d43022284a116be49a0d63f0cd0758a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Health
-  _hotMaterial: {fileID: 0}
-  _coldMaterial: {fileID: 0}
-  slider: {fileID: 0}
+  _hotMaterial: {fileID: 2100000, guid: 04aad10681327db429b3e0d1565a3508, type: 2}
+  _coldMaterial: {fileID: 2100000, guid: 8a1db0e826ff6c44c9fb833eac52b7d5, type: 2}
+  _temperatureIndicator: {fileID: 0}
+  _heatSpeed: 0
+  _coolSpeed: 0
+  _freezeSpeed: 0
 --- !u!1 &8003736219322506109
 GameObject:
   m_ObjectHideFlags: 0
@@ -513,7 +518,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 8a1db0e826ff6c44c9fb833eac52b7d5, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -537,6 +542,37 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &9163028483441998237
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4641506771653261885}
+  m_Layer: 6
+  m_Name: GravityMassPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4641506771653261885
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9163028483441998237}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.3, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1536131709580831314}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &147441696472681937
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -1,6 +1,11 @@
 using System;
+using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.InputSystem;
+
+// ATTENTION
+// not used, from tutorial
+// verify
 
 public class PlayerCharacter : BasicCharacter
 {
