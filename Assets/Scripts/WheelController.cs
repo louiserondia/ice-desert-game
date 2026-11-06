@@ -69,7 +69,7 @@ public class WheelController : MonoBehaviour
 
     private void Update()
     {
-        if (Keyboard.current.eKey.wasPressedThisFrame)
+        if (Keyboard.current.qKey.wasPressedThisFrame)
         {
             transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);
             transform.position = new Vector3(transform.position.x, transform.position.y + 2, transform.position.z);
@@ -86,6 +86,10 @@ public class WheelController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        Health health = GetComponentInParent(typeof(Health)) as Health;
+        if (health.IsDead) 
+            return;
+
         float throttle = ReadInput(_throttleAction);
         float steering = ReadInput(_steeringAction);
         float brake = ReadInput(_brakeAction);

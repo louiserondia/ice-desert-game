@@ -1,8 +1,9 @@
 using System.Diagnostics;
+using System.IO;
 using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class Health : MonoBehaviour
 {
@@ -11,32 +12,42 @@ public class Health : MonoBehaviour
     [SerializeField] private Material _hotMaterial;
     [SerializeField] private Material _coldMaterial;
     [SerializeField] private GameObject _temperatureIndicator;
-    [SerializeField] private float _heatSpeed;
-    [SerializeField] private float _coolSpeed;
+    [SerializeField] private float _sunHeatSpeed;
+    [SerializeField] private float _shadowCoolingSpeed;
     [SerializeField] private float _freezeSpeed;
+    private float _fireSpeed;
 
     private GameObject _sun;
     private float _temperature;
 
-    private bool isInsideEndZone = false;
-    private bool isDead = false;
+    private bool _isInsideEndZone = false;
+    private bool _isDead = false;
+    private float _max_temperature = 100f;
+
+    private bool isInHeatSource = false;
+
+    public bool IsDead
+    {
+        get { return _isDead; }
+    }
 
     private void Awake()
     {
         _sun = GameObject.FindWithTag("Sun");
+        _fireSpeed = _shadowCoolingSpeed;
     }
 
     void Start()
     {
         // reset all data if game restarts after death
         _temperature = 0f;
-        isDead = false;
-      
+        _isDead = false;
+
     }
 
     void Update()
     {
-        if (isDead)
+        if (_isDead)
         {
             if (Keyboard.current.spaceKey.wasPressedThisFrame)
             {
@@ -45,46 +56,75 @@ public class Health : MonoBehaviour
             return;
         }
         UpdateTemperature();
+
+
     }
 
     float GetTemperatureIndicatorPosition(float temperature)
     {
-        const float max = 100;
         float width = _temperatureIndicator.transform.parent.GetComponent<RectTransform>().rect.width;
-        float unit = width / max;
+        float unit = width / (_max_temperature * 2);
 
         return temperature * unit;
     }
 
+    void UpdateMaterial(string path, Material material)
+    {
+        GameObject obj = GameObject.Find(path);
+        obj.GetComponent<MeshRenderer>().material = material;
+    }
+
+    void UpdateCarMaterial(Material material)
+    {
+        UpdateMaterial("BodyVisual/Body", material);
+        UpdateMaterial("BodyVisual/BodyFront", material);
+        UpdateMaterial("BodyVisual/BodyBack/left", material);
+        UpdateMaterial("BodyVisual/BodyBack/right", material);
+        UpdateMaterial("BodyVisual/BodyBack/back", material);
+    }
+
     void UpdateTemperature()
     {
-        if (isInsideEndZone) return;
-        RaycastHit hit;
-        var body = transform.Find("BodyVisual/Body");
-        DayNightCycle sunCycle = _sun.GetComponent<DayNightCycle>();
+        if (_isInsideEndZone) return;
 
+        DayNightCycle sunCycle = _sun.GetComponent<DayNightCycle>();
         Vector3 sunPos = sunCycle.GetMesh.transform.position;
         Vector3 directionSun = transform.position - sunPos;
+        Vector3 sunLightDirection = sunCycle.GetDirectionalLight.transform.forward;
+        GameObject body = GameObject.Find("BodyVisual/Body");
 
-        // day time, sun is up, warm up in the sun and cools down in the shade but not lower than 0 degrees
         if (sunCycle.IsAboveHorizon())
         {
-            Physics.Raycast(sunPos, directionSun, out hit, Mathf.Infinity);
+            bool did_hit = Physics.Raycast(body.transform.position, -sunLightDirection, 10000);
+            UnityEngine.Debug.DrawRay(body.transform.position, -sunLightDirection * 10000, Color.red);
 
-            if (hit.collider.gameObject.name == "BodyVisual")
+            //day in shadow
+            if (did_hit)
             {
-                _temperature += (sunPos.y / directionSun.magnitude) * UnityEngine.Time.deltaTime * _heatSpeed;
-                body.GetComponent<MeshRenderer>().material = _hotMaterial;
+                // cools down but not lower than 0 degrees
+                if (_temperature > 0)
+                    _temperature -= UnityEngine.Time.deltaTime * _shadowCoolingSpeed;
+                UpdateCarMaterial(_coldMaterial);
             }
-            else if (_temperature > 0)
+            //day in sun
+            else
             {
-                _temperature -= UnityEngine.Time.deltaTime * _coolSpeed;
-                body.GetComponent<MeshRenderer>().material = _coldMaterial;
+                if (_temperature < _max_temperature)
+                    _temperature += UnityEngine.Time.deltaTime * _sunHeatSpeed; // constant 
+                UpdateCarMaterial(_hotMaterial);
             }
         }
-        else
+        // night and no fire
+        else if (!isInHeatSource)
         {
             _temperature -= UnityEngine.Time.deltaTime * _freezeSpeed;
+            UpdateCarMaterial(_coldMaterial);
+        }
+        // fire day or night (should only be accessible during the night ? atm day too, but cancels out the cool down in the shadow)
+        if (isInHeatSource)
+        {
+            _temperature += UnityEngine.Time.deltaTime * _fireSpeed;
+            UpdateCarMaterial(_hotMaterial);
         }
 
         _temperatureIndicator.transform.localPosition = new Vector3(
@@ -93,7 +133,8 @@ public class Health : MonoBehaviour
             _temperatureIndicator.transform.localPosition.z
         );
 
-        if (_temperature > 100f || _temperature < -100f)
+        //UnityEngine.Debug.Log(_temperature);
+        if (_temperature > _max_temperature || _temperature < -_max_temperature)
         {
             Kill();
         }
@@ -103,8 +144,9 @@ public class Health : MonoBehaviour
     {
         if (other.name == "EndZone")
         {
-            isInsideEndZone = true;
+            _isInsideEndZone = true;
             UnityEngine.Debug.Log("Entered EndZone");
+            Kill();
         }
     }
 
@@ -112,7 +154,7 @@ public class Health : MonoBehaviour
     {
         if (other.name == "EndZone")
         {
-            isInsideEndZone = false;
+            _isInsideEndZone = false;
             UnityEngine.Debug.Log("Exited EndZone");
         }
     }
@@ -121,7 +163,7 @@ public class Health : MonoBehaviour
     {
         //UnityEngine.Debug.Log("DEAD !!!!!!");
         //Destroy(gameObject);
-        isDead = true;
+        _isDead = true;
     }
 
     public void AddToTemperature(float amount)
@@ -129,6 +171,9 @@ public class Health : MonoBehaviour
         _temperature += amount;
     }
 
-}
+    public void ToggleHeatSource(bool on)
+    {
+        isInHeatSource = on;
+    }
 
-//UnityEngine.Debug.DrawRay(_sun.transform.position, directionSun * 1000, Color.white);
+}

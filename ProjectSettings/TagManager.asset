@@ -4,10 +4,10 @@
 TagManager:
   serializedVersion: 3
   tags:
-  - Friendly
-  - Enemy
   - Sun
   - Moon
+  - Pickup
+  - HeatSource
   layers:
   - Default
   - TransparentFX

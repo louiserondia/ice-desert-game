@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 708704651793208810}
   - component: {fileID: 4032733537167724951}
   - component: {fileID: 235395483092286774}
-  - component: {fileID: 6459801772274516662}
   m_Layer: 0
   m_Name: Cube (2)
   m_TagString: Untagged
@@ -91,27 +90,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &6459801772274516662
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 612601960038097289}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1552802672296013451
 GameObject:
   m_ObjectHideFlags: 0
@@ -123,7 +101,6 @@ GameObject:
   - component: {fileID: 3307634082767612825}
   - component: {fileID: 496704787876339582}
   - component: {fileID: 7130843434415078902}
-  - component: {fileID: 200728836219437016}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -139,13 +116,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1552802672296013451}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0.08064357, y: 0.8369276, z: 0.12833597, w: 0.5259075}
+  m_LocalPosition: {x: -0.024, y: 0.247, z: 0.012}
   m_LocalScale: {x: 0.2, y: 0.2, z: 1.2}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5377598582873655518}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -17.436, y: 115.711, z: 0}
 --- !u!33 &496704787876339582
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -203,27 +180,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &200728836219437016
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1552802672296013451}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &4934767295118231555
 GameObject:
   m_ObjectHideFlags: 0
@@ -233,9 +189,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5377598582873655518}
+  - component: {fileID: 8048707056412613142}
+  - component: {fileID: 3965889281705578928}
   m_Layer: 0
   m_Name: Wood
-  m_TagString: Untagged
+  m_TagString: Pickup
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -250,7 +208,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.8923931, y: 1.8923931, z: 1.8923931}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3307634082767612825}
@@ -258,6 +216,42 @@ Transform:
   - {fileID: 708704651793208810}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8048707056412613142
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4934767295118231555}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 121415eac63d66a478caf1a5867eb090, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Pickup
+  typeName: wood
+  amount: 1
+  maxStack: 50
+--- !u!65 &3965889281705578928
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4934767295118231555}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 0.67, z: 1}
+  m_Center: {x: 0.09, y: 0.21, z: 0}
 --- !u!1 &5645871911186389957
 GameObject:
   m_ObjectHideFlags: 0
@@ -269,7 +263,6 @@ GameObject:
   - component: {fileID: 5317202562500034830}
   - component: {fileID: 1120586074119908831}
   - component: {fileID: 8216396759478762221}
-  - component: {fileID: 7022326671450393922}
   m_Layer: 0
   m_Name: Cube (1)
   m_TagString: Untagged
@@ -285,13 +278,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5645871911186389957}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 0.35991517, z: -0, w: 0.93298507}
-  m_LocalPosition: {x: 0, y: 0.042, z: 0}
+  m_LocalRotation: {x: -0.08559186, y: 0.35839742, z: 0.03301854, w: 0.9290507}
+  m_LocalPosition: {x: 0, y: 0.12100001, z: 0}
   m_LocalScale: {x: 0.2, y: 0.2, z: 1.2}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5377598582873655518}
-  m_LocalEulerAnglesHint: {x: 0, y: 42.19, z: 0}
+  m_LocalEulerAnglesHint: {x: -10.527, y: 42.19, z: 0}
 --- !u!33 &1120586074119908831
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -349,24 +342,3 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &7022326671450393922
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5645871911186389957}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
