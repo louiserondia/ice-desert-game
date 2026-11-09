@@ -29,13 +29,15 @@ public class Menu : MonoBehaviour
         transform.Find("LayoutGroup/ButtonRestart").gameObject.SetActive(false);
     }
 
-    //public void ExitGame()
-    //{
-    //    UnityEngine.Application.Quit();
-    //}
+    /* for future possible implementations
+    public void ExitGame()
+    {
+        UnityEngine.Application.Quit();
+    }
 
-    //public void PlayGame()
-    //{
-    //    Time.timeScale = 1f;
-    //}
+    public void PlayGame()
+    {
+        Time.timeScale = 1f;
+    } 
+    */
 }

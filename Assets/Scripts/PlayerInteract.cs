@@ -8,18 +8,18 @@ public class PlayerInteract : MonoBehaviour
     [SerializeField] private Inventory _inventory;
     [SerializeField] private GameObject _campFirePrefab;
 
-    private List<GameObject> AvailablePickups = new List<GameObject>();
-    private List<GameObject> AvailableHeatSources = new List<GameObject>();
+    private List<GameObject> _availablePickups = new List<GameObject>();
+    private List<GameObject> _availableHeatSources = new List<GameObject>();
 
     void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Pickup"))
         {
-            AvailablePickups.Add(other.gameObject);
+            _availablePickups.Add(other.gameObject);
         }
         if (other.CompareTag("HeatSource"))
         {
-            AvailableHeatSources.Add(other.gameObject);
+            _availableHeatSources.Add(other.gameObject);
         }
     }
 
@@ -27,43 +27,35 @@ public class PlayerInteract : MonoBehaviour
     {
         if (other.CompareTag("Pickup"))
         {
-            AvailablePickups.Remove(other.gameObject);
+            _availablePickups.Remove(other.gameObject);
         }
         if (other.CompareTag("HeatSource"))
         {
-            AvailableHeatSources.Remove(other.gameObject);
+            _availableHeatSources.Remove(other.gameObject);
         }
     }
-
-    //public List<GameObject> GetSortedByDistance()
-    //{
-    //    Vector3 center = transform.position;
-    //    pickupsInside.Sort((a, b) =>
-    //        Vector3.SqrMagnitude(a.transform.position - center)
-    //        .CompareTo(Vector3.SqrMagnitude(b.transform.position - center))
-    //    );
-    //    return pickupsInside;
-    //}
 
     void Update()
     {
         if (Keyboard.current.eKey.wasPressedThisFrame)
+        {
             TryPickup();
+        }
 
-        // if list is not empty, lets health know it need to heat up
-        GetComponent<Health>().ToggleHeatSource(AvailableHeatSources.Count > 0);
+        // heats up if list is not empty
+        GetComponent<Health>().ToggleHeatSource(_availableHeatSources.Count > 0);
     }
 
     void TryPickup()
     {
-        if (AvailablePickups.Count == 0) return;
+        if (_availablePickups.Count == 0) return;
 
-        GameObject pickupObject = AvailablePickups[0].gameObject;
+        GameObject pickupObject = _availablePickups[0].gameObject;
         Pickup pickup = pickupObject.GetComponent<Pickup>();
 
         if (_inventory.Add(pickup) != -1)
         {
-            AvailablePickups.RemoveAt(0);
+            _availablePickups.RemoveAt(0);
             Destroy(pickupObject);
         }
     }
@@ -84,15 +76,15 @@ public class PlayerInteract : MonoBehaviour
         }
 
         Vector3 position = transform.position + Vector3.right * 3f + Vector3.up;
-        GameObject instance = Instantiate(_campFirePrefab, position, Quaternion.identity);
-        StartCoroutine(RemoveAfterDelay(instance, 15f));
+        GameObject instanceCampFire = Instantiate(_campFirePrefab, position, Quaternion.identity);
+        StartCoroutine(RemoveAfterDelay(instanceCampFire, 15f));
     }
 
-    // co routine that will delete heatsource after delay and remove from list
+    // co routine that will remove from list and delete heatsource after delay
     IEnumerator RemoveAfterDelay(GameObject obj, float delay)
     {
         yield return new WaitForSeconds(delay);
-        AvailableHeatSources.Remove(obj);
+        _availableHeatSources.Remove(obj);
         Destroy(obj);
     }
 }

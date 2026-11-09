@@ -13,18 +13,17 @@ public class Health : MonoBehaviour
     [SerializeField] private Material _coldMaterial;
     [SerializeField] private GameObject _temperatureIndicator;
     [SerializeField] private float _sunHeatSpeed;
-    [SerializeField] private float _shadowCoolingSpeed;
     [SerializeField] private float _freezeSpeed;
+    [SerializeField] private float _shadowCoolingSpeed;
     private float _fireSpeed;
 
     private GameObject _sun;
     private float _temperature;
+    private const float _maxTemperature = 100f;
 
     private bool _isInsideEndZone = false;
     private bool _isDead = false;
-    private float _max_temperature = 100f;
-
-    private bool isInHeatSource = false;
+    private bool _isInHeatSource = false;
 
     public bool IsDead
     {
@@ -34,7 +33,7 @@ public class Health : MonoBehaviour
     private void Awake()
     {
         _sun = GameObject.FindWithTag("Sun");
-        _fireSpeed = _shadowCoolingSpeed;
+        _fireSpeed = _shadowCoolingSpeed * 2f;
     }
 
     void Start()
@@ -42,7 +41,7 @@ public class Health : MonoBehaviour
         // reset all data if game restarts after death
         _temperature = 0f;
         _isDead = false;
-
+        _isInHeatSource = false;
     }
 
     void Update()
@@ -56,14 +55,12 @@ public class Health : MonoBehaviour
             return;
         }
         UpdateTemperature();
-
-
     }
 
     float GetTemperatureIndicatorPosition(float temperature)
     {
         float width = _temperatureIndicator.transform.parent.GetComponent<RectTransform>().rect.width;
-        float unit = width / (_max_temperature * 2);
+        float unit = width / (_maxTemperature * 2);
 
         return temperature * unit;
     }
@@ -109,19 +106,22 @@ public class Health : MonoBehaviour
             //day in sun
             else
             {
-                if (_temperature < _max_temperature)
-                    _temperature += UnityEngine.Time.deltaTime * _sunHeatSpeed; // constant 
+                // non linear effect of the heat for tension (slows down if almost dying) 
+                float reduction = _temperature > (_maxTemperature / 5 * 4) ? 0.5f : 1f;
+                if (_temperature < _maxTemperature)
+                    _temperature += UnityEngine.Time.deltaTime * _sunHeatSpeed * reduction;
                 UpdateCarMaterial(_hotMaterial);
             }
         }
         // night and no fire
-        else if (!isInHeatSource)
+        else if (!_isInHeatSource)
         {
-            _temperature -= UnityEngine.Time.deltaTime * _freezeSpeed;
+            float reduction = _temperature < (-_maxTemperature / 5 * 4) ? 0.5f : 1f;
+            _temperature -= UnityEngine.Time.deltaTime * _freezeSpeed * reduction;
             UpdateCarMaterial(_coldMaterial);
         }
-        // fire day or night (should only be accessible during the night ? atm day too, but cancels out the cool down in the shadow)
-        if (isInHeatSource)
+
+        if (_isInHeatSource)
         {
             _temperature += UnityEngine.Time.deltaTime * _fireSpeed;
             UpdateCarMaterial(_hotMaterial);
@@ -133,8 +133,7 @@ public class Health : MonoBehaviour
             _temperatureIndicator.transform.localPosition.z
         );
 
-        //UnityEngine.Debug.Log(_temperature);
-        if (_temperature > _max_temperature || _temperature < -_max_temperature)
+        if (_temperature > _maxTemperature || _temperature < -_maxTemperature)
         {
             Kill();
         }
@@ -173,7 +172,7 @@ public class Health : MonoBehaviour
 
     public void ToggleHeatSource(bool on)
     {
-        isInHeatSource = on;
+        _isInHeatSource = on;
     }
 
 }

@@ -15,10 +15,7 @@ public class Inventory : MonoBehaviour
 
     [SerializeField] private GameObject _woodSocket;
     private InventoryUI inventoryUI;
-    //public Slot[] slots;
     public Dictionary<string, int> slots;
-
-    //public event Action<int> OnSlotChanged;
 
     void Awake()
     {
@@ -30,16 +27,10 @@ public class Inventory : MonoBehaviour
 
     public int Add(Pickup pickup)
     {
-        // Ajoute 1 "Sword"
+        // adds to existing item count or creates slot and add
         slots[pickup.typeName] = slots.GetValueOrDefault(pickup.typeName, 0) + pickup.amount;
 
-        if (slots[pickup.typeName] > pickup.maxStack)
-        {
-            UnityEngine.Debug.Log(slots[pickup.typeName] - pickup.maxStack + " items left");
-        }
-        UnityEngine.Debug.Log(slots[pickup.typeName] + " items in inventory of type " + pickup.typeName);
-
-        // for wood
+        // specific for wood, toggles visibility (back of the truck)
         if (pickup.typeName == "wood" && slots[pickup.typeName] > 0)
         {
             ToggleWoodVisibility(true);

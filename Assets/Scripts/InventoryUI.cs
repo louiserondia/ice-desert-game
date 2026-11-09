@@ -27,7 +27,9 @@ public class InventoryUI : MonoBehaviour
     void Update()
     {
         if (Keyboard.current.tabKey.wasPressedThisFrame)
+        {
             ToggleInventoryUI();
+        }
     }
 
     void ToggleInventoryUI()
@@ -41,9 +43,11 @@ public class InventoryUI : MonoBehaviour
 
     void OnClick(Button button)
     {
-        string name = button.name.Split('_')[1];
+        var splitName = button.name.Split('_');
+        if (splitName.Length < 2) return;
 
-        if (name == "wood")
+        string objectName = splitName[1];
+        if (objectName == "wood")
         {
             GameObject.Find("Player").GetComponent<PlayerInteract>().BurnWood();
         }
